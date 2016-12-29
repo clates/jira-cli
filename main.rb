@@ -13,7 +13,7 @@ def fillOutSubtasks(issueName, storytype)
     removeCloneTestFromSubtasks(issueName)
     if storytype["customitemprompts"] != nil
         storytype["customitemprompts"].each_with_index do | value, idx |
-            print ""
+            puts "Enter a blank title to proceed to the next custom item prompt."
             print value["prompt"]
             devtaskname = STDIN.gets.chomp
             while not devtaskname.empty?
@@ -71,7 +71,6 @@ def createImpediment(storyname, project)
     puts ""
     puts newstory["key"]
     prompt = "Subtask for #{storyname}"
-    print ""
     print prompt
     devtaskname = STDIN.gets.chomp
     while not devtaskname.empty?
