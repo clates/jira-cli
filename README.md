@@ -1,5 +1,13 @@
 # jira-cli
+A command line interface that allows for automation of repetitive JIRA tasks.
 
+# Installation Instructions
+1) Clone repo
+2) gem install bundler
+3) bundle install
+4) ruby main.rb
+
+# Usage Notes
 1-6. Fill Out *
     Looks through the tasktypes.json for "name":*
     Iterates the custom prompts setting items as posted. These could be {TODO: List custom prompts}
@@ -14,6 +22,8 @@
 10. View Assigned Tasks
 
 11. Log Hours
+    Prompts for a given story and then prompts for hours.
+
 12-16. Create *
     Looks through the tasktypes.json for "name":*
     Iterates the custom prompts setting items as posted. These could be {TODO: List custom prompts}
