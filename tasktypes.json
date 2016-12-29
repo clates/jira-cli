@@ -1,0 +1,248 @@
+{
+	"options": [
+		{
+			"name": "Fill Out Bug",
+			"customitemprompts": [],
+			"subtasks": [
+				{
+					"summary": "Replicate Issue",
+					"hours": 0
+				},
+				{
+					"summary": "Implement Code Fix",
+					"hours": 0
+				},
+				{
+					"summary": "Unit Test",
+					"hours": 3
+				},				
+				{
+					"summary": "Write/Edit Manual Test Cases",
+					"hours": 2
+				},
+				{
+					"summary": "Write/Edit Automated Test Cases",
+					"hours": 0
+				},
+				{
+					"summary": "508 Dev Walk-thru",
+					"hours": 1
+				},	
+				{
+					"summary": "Automated Test Execution",
+					"hours": 1
+				},
+
+				{
+					"summary": "Code Review",
+					"hours": 1
+				},				
+				{
+					"summary": "Automated Test Case Review",
+					"hours": 1
+				},
+				
+				{
+					"summary": "SDD - Documentation",
+					"hours": 2
+				},		
+				{
+					"summary": "Regression Test",
+					"hours": 1
+				},										
+				{
+					"summary": "Deploy To Demo",
+					"hours": 1
+				},				
+				{
+					"summary": "508 QA Test",
+					"hours": 2
+				},
+				{
+					"summary": "Manual Test Execution in Demo",
+					"hours": 2
+				}				
+					
+			]			      
+		},
+		{
+			"name": "Fill Out 508 Bug",
+			"customitemprompts": [],
+			"subtasks": [
+				{
+					"summary": "Replicate Issue",
+					"hours": 0
+				},
+				{
+					"summary": "Implement Code Fix",
+					"hours": 0
+				},				
+				{
+					"summary": "Write/Edit Manual Test Cases",
+					"hours": 2
+				},		
+				{
+					"summary": "508 Code Review",
+					"hours": 1
+				},						
+				{
+					"summary": "Code Review",
+					"hours": 1
+				},
+						
+				{
+					"summary": "Regression Test",
+					"hours": 1
+				},										
+				{
+					"summary": "Deploy To Demo",
+					"hours": 1
+				},								
+				{
+					"summary": "Manual Test Execution in Demo",
+					"hours": 2
+				},
+				{
+					"summary": "508 Final Test",
+					"hours": 2
+				}								
+			]			      
+		},
+		{
+			"name": "Fill Out New Feature",
+			"customitemprompts": [
+				{
+					"prompt": "Development Task Name:"
+				}
+			],
+			"subtasks": [								
+				{
+					"summary": "Unit Test",
+					"hours": 3
+				},								
+				{
+					"summary": "Demo Script Update",
+					"hours": 1
+				},
+				{
+					"summary": "Write/Edit Automated Test Cases",
+					"hours": 0
+				},
+				{
+					"summary": "508 Dev Walk-thru",
+					"hours": 1
+				},					
+				{
+					"summary": "508 Code Review",
+					"hours": 1
+				},
+				{
+					"summary": "Code Review",
+					"hours": 1
+				},				
+				{
+					"summary": "Automated Test Case Review",
+					"hours": 1
+				},				
+				{
+					"summary": "SDD - Documentation",
+					"hours": 0
+				},												
+				{
+					"summary": "Deploy To Demo",
+					"hours": 1
+				},				
+				{
+					"summary": "508 QA Test",
+					"hours": 2
+				},				
+				{
+					"summary": "Manual Test Execution in Demo",
+					"hours": 2
+				}				
+			]
+		},
+		{
+			"name": "Fill Out Non-Functional",
+			"customitemprompts": [
+				{
+					"prompt": "Development Task Name:"
+				}
+			],
+			"subtasks": [								
+				{
+					"summary": "Unit Test",
+					"hours": 3
+				},																				
+				{
+					"summary": "Code Review",
+					"hours": 1
+				},								
+				{
+					"summary": "SDD - Documentation",
+					"hours": 0
+				},												
+				{
+					"summary": "Deploy To Demo",
+					"hours": 1
+				},								
+				{
+					"summary": "Manual Test Execution in Demo",
+					"hours": 2
+				}				
+			]
+		},
+		{
+			"name": "Fill Out SDD",
+			"subtasks": [
+				{
+					"summary": "Data Classification",
+					"hours": 2
+				},
+
+				{
+					"summary": "Usage-Risk Classification",
+					"hours": 2
+				},
+				{
+					"summary": "App Design Design Principles and Patterns",
+					"hours": 2
+				},
+				{
+					"summary": "Conceptual Perspective",
+					"hours": 3
+				},
+				{
+					"summary": "Logical Perspective",
+					"hours": 24
+				},
+				{
+					"summary": "Physical Perspective",
+					"hours": 4
+				},
+				{
+					"summary": "(VA) Service Dependencies",
+					"hours": 4
+				},
+				{
+					"summary": "Update Interfaces Used Section",
+					"hours": 4
+				},
+				{
+					"summary": "Review SDD",
+					"hours": 3
+				}
+
+			]
+		},
+		{
+			"name": "Fill Out Custom",
+			"customitemprompts": [
+				{
+					"prompt": "Custom Task Name:"
+				}
+			],
+			"subtasks": []
+		}
+	]
+}
