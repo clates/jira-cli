@@ -1,4 +1,4 @@
-require 'JSON'
+require 'json'
 require 'rest-client'
 require_relative 'config.rb'
 

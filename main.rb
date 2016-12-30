@@ -1,10 +1,10 @@
 require_relative 'task'
 require_relative 'issue'
 require_relative 'config'
+require 'json'
 require 'pp'
 require "highline/import"
 require 'io/console'
-require 'json'
 
 file = File.read('./tasktypes.json')
 @storytypes = JSON.parse(file);
