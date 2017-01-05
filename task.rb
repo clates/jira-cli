@@ -143,7 +143,6 @@ def logTimeForTask(issueName, seconds)
 end
 
 def getSprintStories(sprint)
-
   filter = 'issuetype != Sub-task AND issuetype != Impediment AND Sprint = ' + sprint.to_s
   url = get_domain + "/rest/api/2/search?jql=" + filter
   response = RestClient.get(url, :content_type => :json,:accept => :json, :cookie => cookie)

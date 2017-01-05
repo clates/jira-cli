@@ -175,6 +175,30 @@ def assignUnassignedSubtasks()
     end
 end
 
+def getTeamCapacity()
+    response = getSprintStories(presets[:sprint])
+    sumHours = Hash.new
+    response["issues"].each_with_index do | parenttask, idx |
+      parenttask["fields"]["subtasks"].each_with_index do | value, idx |
+        subtask = getTaskInfo(value["key"])
+        sumHours[subtask["fields"]["assignee"]["key"]] = 0 if sumHours[subtask["fields"]["assignee"]["key"]] == nil
+        sumHours[subtask["fields"]["assignee"]["key"]] += (subtask["fields"]["timetracking"]["remainingEstimateSeconds"].to_i / 3600)
+        print "."
+      end
+    end
+    puts ""
+    puts "-----------Team Capacity Summary-------------------"
+    presets[:team_ids].each do |userid|
+      assignedHours = sumHours[userid[:user_id]] == nil ? 0 : sumHours[userid[:user_id]].to_f
+      puts "User: #{userid[:user_id]}:"
+      puts "   Assigned Hours: \t#{assignedHours}"
+      puts "   Available Hours:\t#{userid[:capacity]}"
+      puts "   Capacity: \t\t#{(assignedHours*100 /  userid[:capacity]).round(2)}%"
+    end
+    puts "---------------------------------------------------"
+
+end
+
 begin
   puts
   loop do
@@ -197,6 +221,7 @@ begin
       menu.choice("View Create Task Metadata") {viewCreateTaskMetaData()}
       menu.choice("View Sprint Stories") {viewSprintStories()}
       menu.choice("Assign Unassigned Subtasks") {assignUnassignedSubtasks()}
+      menu.choice("Get Team Capacity") {getTeamCapacity()}
       menu.choice(:Quit, "Exit program.") { exit }
     end
   end
