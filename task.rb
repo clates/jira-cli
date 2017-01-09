@@ -28,12 +28,13 @@ def createSubtask(issueName, taskName, hours)
                        {
                             "originalEstimate" => hours.to_s + "h"
                        },
-                       "description" => ""
+                       "description" => "",
+                       # "assignee" => curuser
                    }
-
-
           }.to_json, :content_type => :json,:accept => :json, :cookie => cookie)
-          return JSON.parse(response)
+          resp = JSON.parse(response)
+          assignTo(resp["key"], promptForTeamMember)
+          return resp
       end
   else
     puts issueName + " already contains sub task: " + taskName
@@ -139,7 +140,13 @@ def logTimeForTask(issueName, seconds)
     response = RestClient.post(url, {
         "timeSpentSeconds": seconds
       }.to_json, :content_type => :json,:accept => :json, :cookie => cookie)
-  
+end
+
+def getSprintIDByStory(issueName)
+  customStr = getTaskInfo(issueName)["fields"]["customfield_10111"].to_s
+  customStr = customStr[customStr.index("id="), 7].to_s #magic number because I cbf to do it correctly right now
+  puts customStr
+  return customStr
 end
 
 def getSprintStories(sprint)

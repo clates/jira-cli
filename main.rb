@@ -150,6 +150,18 @@ def viewSprintStories()
     end
 end
 
+def promptForTeamMember()
+  curuser = 'none'
+  choose do |menu|
+    menu.prompt = "Assign to?"
+
+    presets[:team_ids].each_with_index do | user, idx |
+      menu.choice(user[:name]) { curuser = user[:user_id] }
+    end
+  end
+  return curuser
+end
+
 def assignUnassignedSubtasks()
     response = getSprintStories(presets[:sprint])
     response["issues"].each_with_index do | parenttask, idx |
@@ -161,15 +173,7 @@ def assignUnassignedSubtasks()
           puts "Story: " +  parenttask["key"] + ": " + parenttask["fields"]["summary"]
           puts " Task: " + subtask["fields"]["summary"]
           puts "------------------------------"
-          curuser = 'none'
-          choose do |menu|
-            menu.prompt = "Assign to?"
-
-            presets[:team_ids].each_with_index do | user, idx |
-              menu.choice(user[:name]) { curuser = user[:user_id] }
-            end
-          end
-          assignTo(value["key"], curuser)
+          assignTo(value["key"], promptForTeamMember)
         end
       end
     end
@@ -222,6 +226,7 @@ begin
       menu.choice("View Sprint Stories") {viewSprintStories()}
       menu.choice("Assign Unassigned Subtasks") {assignUnassignedSubtasks()}
       menu.choice("Get Team Capacity") {getTeamCapacity()}
+      menu.choice("Get Sprint ID By Story") {getSprintIDByStory(promptForIssue)}
       menu.choice(:Quit, "Exit program.") { exit }
     end
   end
