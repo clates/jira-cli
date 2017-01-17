@@ -2,12 +2,20 @@
 A command line interface that allows for automation of repetitive JIRA tasks.
 
 # Installation Instructions
-1) Clone repo
-2) gem install bundler
-3) bundle install
-4) ruby main.rb
+1. Clone repo
+2. gem install bundler
+3. bundle install
+4. ruby main.rb
 
-# Usage Notes
+#Typical Sprint Planning Usage
+1. Assign some story to the sprint, then run the Get Sprint ID by Story to get the sprint ID.
+2. Fill out the Sprint ID found in presets.rb
+3. Fill out the users and their available hours in presets.rb
+4. Bring in a story and task it out using 1-6.
+5. After the story is added to the sprint, check the team capacity and plan the next story with that in mind.
+6. Repeat step 3-5.
+
+# Generic Usage Notes
 1-6. Fill Out *
     Looks through the tasktypes.json for "name":*
     Iterates the custom prompts setting items as posted. These could be {TODO: List custom prompts}
@@ -42,12 +50,3 @@ A command line interface that allows for automation of repetitive JIRA tasks.
 
 21. Quit
     Exit the program.
-
-
-#Typical usage
-1. Assign some story to the sprint, then run the Get Sprint ID by Story to get the sprint ID.
-2. Fill out the Sprint ID found in presets.rb
-3. Fill out the users and their available hours in presets.rb
-4. Bring in a story and task it out using 1-6.
-5. After the story is added to the sprint, check the team capacity and plan the next story with that in mind.
-6. Repeat step 3-5.
