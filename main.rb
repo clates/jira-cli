@@ -183,11 +183,15 @@ def getTeamCapacity()
     response = getSprintStories(presets[:sprint])
     sumHours = Hash.new
     response["issues"].each_with_index do | parenttask, idx |
+      begin
       parenttask["fields"]["subtasks"].each_with_index do | value, idx |
         subtask = getTaskInfo(value["key"])
         sumHours[subtask["fields"]["assignee"]["key"]] = 0 if sumHours[subtask["fields"]["assignee"]["key"]] == nil
         sumHours[subtask["fields"]["assignee"]["key"]] += (subtask["fields"]["timetracking"]["remainingEstimateSeconds"].to_i / 3600)
         print "."
+      end
+      rescue
+        #Figure out how to gracefully catch a failure.
       end
     end
     puts ""
