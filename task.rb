@@ -1,7 +1,7 @@
 require_relative 'login'
 require_relative 'config'
 
-def createSubtask(issueName, taskName, hours)
+def createSubtask(issueName, taskName, hours, description='')
 
   if (!hasSubTask(issueName, taskName))
       if (hours == 0)
@@ -28,7 +28,7 @@ def createSubtask(issueName, taskName, hours)
                        {
                             "originalEstimate" => hours.to_s + "h"
                        },
-                       "description" => "",
+                       "description" => description,
                        # "assignee" => curuser
                    }
           }.to_json, :content_type => :json,:accept => :json, :cookie => cookie)

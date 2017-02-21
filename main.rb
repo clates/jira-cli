@@ -24,8 +24,12 @@ def fillOutSubtasks(issueName, storytype)
         end
     end
     
-    storytype["subtasks"].each_with_index do | value, idx | 
+    storytype["subtasks"].each_with_index do | value, idx |
+      if value["description"]==""
         createSubtask(issueName, value["summary"], value["hours"])
+      else
+        createSubtask(issueName, value["summary"], value["hours"], value["description"])
+      end
     end
 end
 
