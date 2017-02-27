@@ -186,18 +186,14 @@ end
 def getTeamCapacity()
     response = getSprintStories(presets[:sprint])
     sumHours = Hash.new
-    response["issues"].each_with_index do | parenttask, idx |
-      begin
-      parenttask["fields"]["subtasks"].each_with_index do | value, idx |
-        subtask = getTaskInfo(value["key"])
-        sumHours[subtask["fields"]["assignee"]["key"]] = 0 if sumHours[subtask["fields"]["assignee"]["key"]] == nil
-        sumHours[subtask["fields"]["assignee"]["key"]] += (subtask["fields"]["timetracking"]["remainingEstimateSeconds"].to_i / 3600)
-        print "."
-      end
-      rescue
-        #Figure out how to gracefully catch a failure.
-      end
-    end
+    t1=Time.now
+    response["issues"].map{|parentTask|
+      Thread.new{
+        addSubtaskToTotalHours(sumHours, parentTask)
+      }
+    }.each{|t|t.join}
+    t2=Time.now
+    puts "Est Time Taken: #{t2-t1}"
     puts ""
     puts "-----------Team Capacity Summary-------------------"
     presets[:team_ids].each do |userid|
@@ -208,7 +204,19 @@ def getTeamCapacity()
       puts "   Capacity: \t\t#{(assignedHours*100 /  userid[:capacity]).round(2)}%"
     end
     puts "---------------------------------------------------"
+end
 
+def addSubtaskToTotalHours(hours, parentTask)
+  begin
+    parentTask["fields"]["subtasks"].each{ |value|
+      subtask = getTaskInfo(value["key"])
+      hours[subtask["fields"]["assignee"]["key"]] = 0 if hours[subtask["fields"]["assignee"]["key"]] == nil
+      hours[subtask["fields"]["assignee"]["key"]] += (subtask["fields"]["timetracking"]["remainingEstimateSeconds"].to_i / 3600)
+      print "."
+    }
+  rescue
+    #Figure out how to gracefully catch a failure.
+  end
 end
 
 begin

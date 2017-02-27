@@ -49,7 +49,8 @@ def getProjectList()
 end
 
 def getTaskInfo(issueName)
-    url = get_domain+'/rest/api/2/issue/' + issueName
+    url = "#{get_domain}/rest/api/2/issue/#{issueName}?fields=reporter,subtasks,summary,description,timetracking,
+                                                        issuetype,parent,project,assignee,id,key,customfield_10111"
     response = JSON.parse(RestClient.get(url, {:accept => "application/json", :cookie => cookie}))
     return response
 end
