@@ -234,6 +234,7 @@ def exportSprintToCSV(filename)
                    subtask["fields"]["assignee"]["key"],
                    subtask["fields"]["timetracking"]["originalEstimateSeconds"].to_i / 3600,
                    subtask["fields"]["summary"]]
+          print "."
         rescue
           file << [subtask["key"],
                    "FAILED TO PARSE",
