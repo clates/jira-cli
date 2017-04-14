@@ -227,16 +227,27 @@ def exportSprintToCSV(filename)
     response["issues"].each do | parentStory |
       parentStory["fields"]["subtasks"].each{ |value|
         subtask = getTaskInfo(value["key"])
-        file << [subtask["key"], subtask["fields"]["parent"]["key"], subtask["fields"]["assignee"]["key"], subtask["fields"]["timetracking"]["originalEstimateSeconds"].to_i / 3600, subtask["fields"]["summary"]]
+        #ap subtask #If you want to add more columns, find them from here
+        begin
+          file << [subtask["key"],
+                   subtask["fields"]["parent"]["key"],
+                   subtask["fields"]["assignee"]["key"],
+                   subtask["fields"]["timetracking"]["originalEstimateSeconds"].to_i / 3600,
+                   subtask["fields"]["summary"]]
+        rescue
+          file << [subtask["key"],
+                   "FAILED TO PARSE",
+                   "", "", ""]
+        end
       }
     end
   end
+  ap "CSV successfully written to #{filename}"
 end
 def promptForFileName
   print "File Name: "
   return STDIN.gets.chomp
 end
-
 
 begin
   puts
