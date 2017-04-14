@@ -2,7 +2,8 @@ require_relative 'task'
 require_relative 'issue'
 require_relative 'config'
 require 'json'
-require 'pp'
+require 'awesome_print'
+require 'csv'
 require "highline/import"
 require 'io/console'
 
@@ -25,7 +26,7 @@ def fillOutSubtasks(issueName, storytype)
     end
     
     storytype["subtasks"].each_with_index do | value, idx |
-      if value["description"]==""
+      if value["description"].nil?
         createSubtask(issueName, value["summary"], value["hours"])
       else
         createSubtask(issueName, value["summary"], value["hours"], value["description"])
@@ -144,7 +145,7 @@ def logTime
 end
 
 def viewCreateTaskMetaData()
-    pp(createIssueMetaData())
+    ap(createIssueMetaData())
 end
 
 def viewSprintStories()
@@ -186,18 +187,11 @@ end
 def getTeamCapacity()
     response = getSprintStories(presets[:sprint])
     sumHours = Hash.new
-    response["issues"].each_with_index do | parenttask, idx |
-      begin
-      parenttask["fields"]["subtasks"].each_with_index do | value, idx |
-        subtask = getTaskInfo(value["key"])
-        sumHours[subtask["fields"]["assignee"]["key"]] = 0 if sumHours[subtask["fields"]["assignee"]["key"]] == nil
-        sumHours[subtask["fields"]["assignee"]["key"]] += (subtask["fields"]["timetracking"]["remainingEstimateSeconds"].to_i / 3600)
-        print "."
-      end
-      rescue
-        #Figure out how to gracefully catch a failure.
-      end
-    end
+    response["issues"].map{|parentTask|
+      Thread.new{
+        addSubtaskToTotalHours(sumHours, parentTask)
+      }
+    }.each{|t|t.join}
     puts ""
     puts "-----------Team Capacity Summary-------------------"
     presets[:team_ids].each do |userid|
@@ -208,7 +202,49 @@ def getTeamCapacity()
       puts "   Capacity: \t\t#{(assignedHours*100 /  userid[:capacity]).round(2)}%"
     end
     puts "---------------------------------------------------"
+end
 
+def addSubtaskToTotalHours(hours, parentTask)
+  begin
+    parentTask["fields"]["subtasks"].each{ |value|
+      subtask = getTaskInfo(value["key"])
+      hours[subtask["fields"]["assignee"]["key"]] = 0 if hours[subtask["fields"]["assignee"]["key"]] == nil
+      hours[subtask["fields"]["assignee"]["key"]] += (subtask["fields"]["timetracking"]["remainingEstimateSeconds"].to_i / 3600)
+      print "."
+    }
+  rescue
+    #Figure out how to gracefully catch a failure.
+  end
+end
+
+def exportSprintToCSV(filename)
+  CSV.open(filename, "wb") do |file|
+    file << ["ID", "ParentID", "Asignee", "Hours", "Title"]
+    response = getSprintStories(presets[:sprint])
+    response["issues"].each do | parentStory |
+      parentStory["fields"]["subtasks"].each{ |value|
+        subtask = getTaskInfo(value["key"])
+        #ap subtask #If you want to add more columns, find them from here
+        begin
+          file << [subtask["key"],
+                   subtask["fields"]["parent"]["key"],
+                   subtask["fields"]["assignee"]["key"],
+                   subtask["fields"]["timetracking"]["originalEstimateSeconds"].to_i / 3600,
+                   subtask["fields"]["summary"]]
+          print "."
+        rescue
+          file << [subtask["key"],
+                   "FAILED TO PARSE",
+                   "", "", ""]
+        end
+      }
+    end
+  end
+  ap "CSV successfully written to #{filename}"
+end
+def promptForFileName
+  print "File Name: "
+  return STDIN.gets.chomp
 end
 
 begin
@@ -235,6 +271,7 @@ begin
       menu.choice("Assign Unassigned Subtasks") {assignUnassignedSubtasks()}
       menu.choice("Get Team Capacity") {getTeamCapacity()}
       menu.choice("Get Sprint ID By Story") {getSprintIDByStory(promptForIssue)}
+      menu.choice("Export Sprint to CSV") {exportSprintToCSV(promptForFileName)}
       menu.choice(:Quit, "Exit program.") { exit }
     end
   end
