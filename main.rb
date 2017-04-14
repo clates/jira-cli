@@ -187,14 +187,11 @@ end
 def getTeamCapacity()
     response = getSprintStories(presets[:sprint])
     sumHours = Hash.new
-    t1=Time.now
     response["issues"].map{|parentTask|
       Thread.new{
         addSubtaskToTotalHours(sumHours, parentTask)
       }
     }.each{|t|t.join}
-    t2=Time.now
-    puts "Est Time Taken: #{t2-t1}"
     puts ""
     puts "-----------Team Capacity Summary-------------------"
     presets[:team_ids].each do |userid|
