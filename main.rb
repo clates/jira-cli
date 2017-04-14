@@ -2,7 +2,8 @@ require_relative 'task'
 require_relative 'issue'
 require_relative 'config'
 require 'json'
-require 'pp'
+require 'awesome_print'
+require 'csv'
 require "highline/import"
 require 'io/console'
 
@@ -144,7 +145,7 @@ def logTime
 end
 
 def viewCreateTaskMetaData()
-    pp(createIssueMetaData())
+    ap(createIssueMetaData())
 end
 
 def viewSprintStories()
@@ -219,6 +220,24 @@ def addSubtaskToTotalHours(hours, parentTask)
   end
 end
 
+def exportSprintToCSV(filename)
+  CSV.open(filename, "wb") do |file|
+    file << ["ID", "ParentID", "Asignee", "Hours", "Title"]
+    response = getSprintStories(presets[:sprint])
+    response["issues"].each do | parentStory |
+      parentStory["fields"]["subtasks"].each{ |value|
+        subtask = getTaskInfo(value["key"])
+        file << [subtask["key"], subtask["fields"]["parent"]["key"], subtask["fields"]["assignee"]["key"], subtask["fields"]["timetracking"]["originalEstimateSeconds"].to_i / 3600, subtask["fields"]["summary"]]
+      }
+    end
+  end
+end
+def promptForFileName
+  print "File Name: "
+  return STDIN.gets.chomp
+end
+
+
 begin
   puts
   loop do
@@ -243,6 +262,7 @@ begin
       menu.choice("Assign Unassigned Subtasks") {assignUnassignedSubtasks()}
       menu.choice("Get Team Capacity") {getTeamCapacity()}
       menu.choice("Get Sprint ID By Story") {getSprintIDByStory(promptForIssue)}
+      menu.choice("Export Sprint to CSV") {exportSprintToCSV(promptForFileName)}
       menu.choice(:Quit, "Exit program.") { exit }
     end
   end
