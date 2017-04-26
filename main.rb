@@ -119,12 +119,12 @@ end
 
 def viewTask(issueName)
     response = getTaskInfo(issueName)
-    pp(response)
+    ap(response)
 end
 
 def viewMyTasks
     response = getOpenAssignedTasks
-    pp(response)
+    ap(response)
 end
 
 def logTime
