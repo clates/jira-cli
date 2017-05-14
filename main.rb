@@ -159,7 +159,7 @@ def promptForTeamMember()
   curuser = 'none'
   choose do |menu|
     menu.prompt = "Assign to?"
-
+    menu.choice("No Assignee") {curuser = 'unassigned'}
     presets[:team_ids].each_with_index do | user, idx |
       menu.choice(user[:name]) { curuser = user[:user_id] }
     end

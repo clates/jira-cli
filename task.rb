@@ -20,7 +20,7 @@ def createSubtask(issueName, taskName, hours, description='')
                        "parent" => {"id" => parentId},
                        "project" => { "key" => projectKey},
                        "summary" => taskName,
-                       "labels"=>["Remediation_backlog"],
+                       # "labels"=>["Remediation_backlog"],
                        "issuetype" => {
                                      "name" => "Sub-task"
                                   },
@@ -105,7 +105,8 @@ def assignToMe(issueName)
 end
 
 def assignTo(issueName, userid)
-  puts "Assigning Task: " + issueName + " to " + userid 
+  if userid != 'unassigned'
+    puts "Assigning Task: #{issueName} to #{userid}"
     url = get_domain+'/rest/api/2/issue/' + issueName
         response = RestClient.put(url, {
             "fields" => {
@@ -114,7 +115,9 @@ def assignTo(issueName, userid)
                       }
                    }
           }.to_json, :content_type => :json,:accept => :json, :cookie => cookie)
-
+  else
+    puts "Leaving Task: #{issueName} #{userid}"
+  end
 end
 
 def addLabel(issueName)
